@@ -1,78 +1,108 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>Finaqular — Staff CRM Dashboard</title>
+<title>Finaqular — Staff CRM (Login)</title>
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <style>
-:root{
-  --bg-1:#030618;
-  --bg-2:#07122a;
-  --glass: rgba(255,255,255,0.03);
-  --muted:#9fb4d0;
-  --accent:#00f0ff;
-  --accent-2:#00aaff;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-}
-*{box-sizing:border-box}
-body{margin:0; color:#eaf6ff; background: radial-gradient(circle at 10% 10%, rgba(0,240,255,0.04), transparent), linear-gradient(180deg,var(--bg-1),var(--bg-2)); -webkit-font-smoothing:antialiased;}
-.wrap{max-width:1200px;margin:28px auto;padding:18px}
-header{display:flex;align-items:center;gap:12px}
-.brand{font-weight:900;font-size:20px;letter-spacing:1px;background:linear-gradient(90deg,var(--accent),var(--accent-2));-webkit-background-clip:text;color:transparent}
-.sub{color:var(--muted);font-size:13px}
-.top-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
-button{border:0;padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:700}
-.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
-.btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#022426}
-.card{background:linear-gradient(180deg,rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 8px 30px rgba(2,6,23,0.6)}
-.table-wrap{overflow:auto}
-table{width:100%;border-collapse:collapse;font-size:14px}
-th, td{padding:10px 12px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.03)}
-th{font-size:12px;color:var(--muted);text-transform:uppercase}
-.status-pill{padding:6px 9px;border-radius:999px;font-weight:700;font-size:12px}
-.s-new{background:rgba(0,240,255,0.06);color:var(--accent)}
-.s-contacted{background:rgba(255,255,255,0.03);color:#ffd166}
-.s-qualified{background:rgba(255,255,255,0.03);color:#b794f4}
-.s-proposal{background:rgba(255,255,255,0.03);color:#9ae6b4}
-.s-won{background:rgba(0,240,255,0.06);color:#10b981}
-.s-lost{background:rgba(255,255,255,0.03);color:#ef4444}
-.action-btn{padding:6px 10px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.04);cursor:pointer;color:#d3e2ff}
-.action-btn:hover{background:rgba(255,255,255,0.08)}
-.small{font-size:13px;color:var(--muted)}
-.modal-backdrop{position:fixed;inset:0;background:rgba(2,6,23,0.6);display:none;align-items:center;justify-content:center;padding:18px;z-index:999}
-.modal{width:100%;max-width:720px;background:linear-gradient(180deg,#071022,#04101a);padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.02)}
-.modal input, .modal textarea, .modal select {width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;margin-top:8px}
-@media(max-width:900px){ .wrap{padding:12px} table{font-size:13px} }
+  :root{
+    --bg1:#041026; --bg2:#071428; --glass:rgba(255,255,255,0.03);
+    --muted:#9fb4d0; --accent:#00f0ff; --accent2:#00aaff;
+    font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;color:#eaf6ff;background:linear-gradient(180deg,var(--bg1),var(--bg2));-webkit-font-smoothing:antialiased;}
+
+  /* centered login */
+  .center{max-width:1100px;margin:28px auto;padding:18px}
+  .logo{font-weight:900;font-size:26px;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;color:transparent}
+  .muted{color:var(--muted)}
+  .card{background:linear-gradient(180deg,rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+
+  /* login */
+  #login-screen{max-width:420px;margin:70px auto;padding:24px;border-radius:12px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04)}
+  input, textarea, select{width:100%;padding:10px;margin-top:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+  button{padding:10px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:700}
+  .btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#032828}
+  .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+
+  /* dashboard */
+  #dashboard{display:none}
+  table{width:100%;border-collapse:collapse;margin-top:12px}
+  th,td{padding:12px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:left}
+  th{font-size:12px;color:var(--muted);text-transform:uppercase}
+  .status-pill{padding:6px 8px;border-radius:999px;font-weight:700;font-size:12px;color:var(--accent)}
+
+  .action-btn{padding:6px 10px;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.04);cursor:pointer;color:#d8eefc}
+  .action-btn:hover{background:rgba(255,255,255,0.06)}
+
+  .topbar{display:flex;align-items:center;gap:12px;justify-content:space-between}
+  .search{width:420px}
+
+  /* modal */
+  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:999}
+  .modal{width:100%;max-width:720px;padding:16px;border-radius:12px;background:#071323;border:1px solid rgba(255,255,255,0.04)}
+  .modal input, .modal textarea, .modal select{margin-top:8px}
+
+  @media(max-width:800px){
+    .search{width:100%}
+    th,td{padding:8px}
+  }
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
+  <div class="center">
+    <div style="display:flex;align-items:center;gap:12px;justify-content:space-between">
       <div>
-        <div class="brand">FINAQULAR</div>
-        <div class="sub">Staff CRM Dashboard — Real-time pipeline & lead management</div>
+        <div class="logo">FINAQULAR</div>
+        <div class="muted" style="margin-top:6px">Staff Portal — Internal access</div>
       </div>
 
-      <div class="top-actions">
-        <div id="auth-section" class="card" style="padding:8px 10px;display:flex;gap:10px;align-items:center">
-          <div class="small muted" id="user-label">Not signed in</div>
+      <div id="nav-links" style="display:none;align-items:center;gap:8px">
+        <button id="btn-logout" class="btn-ghost">Logout</button>
+      </div>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="login-screen" class="card" aria-hidden="false">
+      <h2 style="margin:0 0 8px">Staff Login</h2>
+      <div class="muted" style="font-size:13px;margin-bottom:10px">Use your staff credentials to access leads</div>
+
+      <label class="muted" style="font-size:13px;margin-top:8px">Username</label>
+      <input id="login-user" type="email" placeholder="admin@finaqular.com">
+
+      <label class="muted" style="font-size:13px;margin-top:8px">Password</label>
+      <input id="login-pass" type="password" placeholder="admin@123">
+
+      <button id="login-btn" class="btn-primary" type="button" style="margin-top:14px">Sign In</button>
+      <div id="login-error" style="color:#ff8080;margin-top:10px"></div>
+
+      <div style="margin-top:12px;color:var(--muted);font-size:13px">Credentials: <strong>admin@finaqular.com</strong> / <strong>admin@123</strong></div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboard">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:18px">
+        <div>
+          <h2 style="margin:0">Staff Dashboard</h2>
+          <div class="muted" style="margin-top:6px">Real-time leads — updated automatically</div>
         </div>
-        <button id="btn-signin" class="btn-primary">Login</button>
-        <button id="btn-signout" class="btn-ghost" style="display:none">Sign out</button>
-      </div>
-    </header>
 
-    <div style="margin-top:18px" class="card">
-      <h3 style="margin:0 0 12px">Lead List</h3>
-      <div class="table-wrap">
+        <div style="display:flex;gap:8px;align-items:center">
+          <input id="search" class="search" type="search" placeholder="Search by name, email, phone, comment" />
+          <button id="refresh" class="btn-ghost">Refresh</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:14px">
         <table aria-live="polite">
           <thead>
             <tr>
               <th>Name</th>
               <th>Email</th>
               <th>Phone</th>
-              <th>Status</th>
-              <th>Owner</th>
+              <th>Comment</th>
+              <th>Date & Time</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -84,51 +114,45 @@ th{font-size:12px;color:var(--muted);text-transform:uppercase}
     </div>
   </div>
 
-  <!-- Edit Modal -->
+  <!-- EDIT MODAL -->
   <div class="modal-backdrop" id="modal">
     <div class="modal card">
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <h3 id="modal-title">Edit Lead</h3>
-        <button id="modal-close" class="btn-ghost">Close</button>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h3 style="margin:0">Edit Lead</h3>
+        <div>
+          <button id="modal-delete" class="btn-ghost" style="margin-right:8px;background:#3b1b1b;color:#fff">Delete</button>
+          <button id="modal-close" class="btn-ghost">Close</button>
+        </div>
       </div>
 
       <div style="margin-top:12px">
-        <label class="small">Name</label>
-        <input id="m-name" />
+        <label class="muted" style="font-size:13px">Name</label>
+        <input id="m-name" type="text">
 
-        <label class="small">Email</label>
-        <input id="m-email" />
+        <label class="muted" style="font-size:13px">Email</label>
+        <input id="m-email" type="email">
 
-        <label class="small">Phone</label>
-        <input id="m-phone" />
+        <label class="muted" style="font-size:13px">Phone</label>
+        <input id="m-phone" type="text">
 
-        <label class="small">Status</label>
-        <select id="m-status">
-          <option>New</option><option>Contacted</option><option>Qualified</option><option>Proposal</option><option>Won</option><option>Lost</option>
-        </select>
-
-        <label class="small">Owner</label>
-        <input id="m-owner" placeholder="owner email (optional)" />
-
-        <label class="small">Comment (customer)</label>
-        <textarea id="m-comment"></textarea>
+        <label class="muted" style="font-size:13px">Comment</label>
+        <textarea id="m-comment" rows="4"></textarea>
 
         <div style="display:flex;gap:8px;margin-top:12px">
-          <button id="modal-save" class="btn-primary">Save</button>
-          <button id="modal-delete" class="btn-ghost" style="background:#2b2b2b;color:#fff">Delete</button>
+          <button id="modal-save" class="btn-primary">Save changes</button>
         </div>
       </div>
     </div>
   </div>
 
 <script type="module">
-  // -------------------------
-  // Firebase config (you provided)
-  // -------------------------
+  // ---------------------------
+  // Firebase config (use your project keys)
+  // ---------------------------
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import {
     getFirestore, collection, query, orderBy, onSnapshot,
-    doc, getDoc, updateDoc, deleteDoc, addDoc, serverTimestamp
+    doc, getDoc, updateDoc, deleteDoc
   } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -143,128 +167,188 @@ th{font-size:12px;color:var(--muted);text-transform:uppercase}
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // UI refs
-  const tbody = document.getElementById('table-body');
-  const modalBackdrop = document.getElementById('modal');
+  // UI elements
+  const loginScreen = document.getElementById('login-screen');
+  const loginBtn = document.getElementById('login-btn');
+  const loginError = document.getElementById('login-error');
+  const loginUser = document.getElementById('login-user');
+  const loginPass = document.getElementById('login-pass');
+
+  const dashboard = document.getElementById('dashboard');
+  const navLinks = document.getElementById('nav-links');
+  const logoutBtn = document.getElementById('btn-logout');
+
+  const tableBody = document.getElementById('table-body');
+  const searchInput = document.getElementById('search');
+  const refreshBtn = document.getElementById('refresh');
+
+  // modal elements
+  const modal = document.getElementById('modal');
   const modalClose = document.getElementById('modal-close');
   const modalSave = document.getElementById('modal-save');
   const modalDelete = document.getElementById('modal-delete');
-
   const mName = document.getElementById('m-name');
   const mEmail = document.getElementById('m-email');
   const mPhone = document.getElementById('m-phone');
-  const mStatus = document.getElementById('m-status');
-  const mOwner = document.getElementById('m-owner');
   const mComment = document.getElementById('m-comment');
 
-  let currentLeadId = null;
+  let currentId = null;
+  let allLeads = [];
 
-  // Real-time listener for leads collection (ordered by createdAt desc)
-  const q = query(collection(db, 'leads'), orderBy('createdAt','desc'));
-  onSnapshot(q, snapshot => {
-    // build rows
-    const rows = [];
-    snapshot.forEach(docSnap => {
-      const d = docSnap.data();
-      const id = docSnap.id;
-      rows.push({ id, ...d });
-    });
-    renderRows(rows);
-  }, err=>{
-    console.error('Realtime error', err);
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#ff9b9b">Realtime error: ${err.message}</td></tr>`;
+  // static login credentials
+  const STAFF_USER = "admin@finaqular.com";
+  const STAFF_PASS = "admin@123";
+
+  // handle login
+  loginBtn.addEventListener('click', () => {
+    const u = (loginUser.value || '').trim();
+    const p = (loginPass.value || '').trim();
+    if (u === STAFF_USER && p === STAFF_PASS) {
+      loginError.textContent = '';
+      loginScreen.style.display = 'none';
+      dashboard.style.display = 'block';
+      navLinks.style.display = 'flex';
+      startRealtime(); // start listening after login to avoid unnecessary reads
+    } else {
+      loginError.textContent = 'Incorrect username or password.';
+    }
   });
 
-  function renderRows(leads){
-    if(!leads || leads.length === 0){
-      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--muted)">No leads yet.</td></tr>`;
+  // logout
+  logoutBtn?.addEventListener('click', () => {
+    dashboard.style.display = 'none';
+    loginScreen.style.display = 'block';
+    navLinks.style.display = 'none';
+    // optionally clear table
+    tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--muted)">Logged out</td></tr>`;
+    // stopRealtime? For simplicity reload page
+    location.reload();
+  });
+
+  // Start real-time listener (called after successful login)
+  function startRealtime(){
+    const q = query(collection(db, 'leads'), orderBy('createdAt', 'desc'));
+    onSnapshot(q, snapshot => {
+      const rows = [];
+      snapshot.forEach(snap => {
+        const d = snap.data();
+        rows.push({ id: snap.id, ...d });
+      });
+      allLeads = rows;
+      renderRows(rows);
+    }, err => {
+      console.error('Realtime error', err);
+      tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#ff9b9b">Realtime error: ${err.message}</td></tr>`;
+    });
+  }
+
+  // render rows function (applies search filter)
+  function renderRows(rows){
+    const q = (searchInput.value || '').trim().toLowerCase();
+    const filtered = rows.filter(r => {
+      if(!q) return true;
+      const hay = `${r.name||''} ${r.email||''} ${r.phone||''} ${r.comment||''}`.toLowerCase();
+      return hay.includes(q);
+    });
+
+    if(!filtered.length){
+      tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--muted)">No leads found.</td></tr>`;
       return;
     }
 
-    tbody.innerHTML = leads.map(l => {
-      const email = escapeHtml(l.email || '-');
-      const phone = escapeHtml(l.phone || '-');
-      const status = escapeHtml(l.status || 'New');
-      const owner = escapeHtml(l.owner || '-');
-      return `<tr data-id="${l.id}">
-        <td style="font-weight:700">${escapeHtml(l.name||'-')}</td>
-        <td class="small">${email}</td>
-        <td class="small">${phone}</td>
-        <td><span class="status-pill s-${(status||'new').toLowerCase()}">${status}</span></td>
-        <td class="small">${owner}</td>
-        <td><button class="action-btn" data-id="${l.id}" data-action="edit">Edit</button></td>
+    tableBody.innerHTML = filtered.map(r => {
+      const created = formatTimestamp(r.createdAt);
+      return `<tr data-id="${r.id}">
+        <td style="font-weight:700">${escapeHtml(r.name || '-')}</td>
+        <td class="muted">${escapeHtml(r.email || '-')}</td>
+        <td class="muted">${escapeHtml(r.phone || '-')}</td>
+        <td class="muted" style="max-width:360px">${escapeHtml(r.comment || '')}</td>
+        <td class="muted">${escapeHtml(created)}</td>
+        <td><button class="action-btn" data-id="${r.id}" data-action="edit">Edit</button></td>
       </tr>`;
     }).join('');
 
-    // attach click listeners for edit buttons
+    // attach click listeners
     document.querySelectorAll('button[data-action="edit"]').forEach(btn=>{
-      btn.addEventListener('click', (e)=> {
+      btn.addEventListener('click', async (e) => {
         const id = btn.dataset.id;
-        openModal(id);
+        openEdit(id);
       });
     });
   }
 
-  // open modal and populate data
-  async function openModal(id){
-    currentLeadId = id;
-    modalBackdrop.style.display = 'flex';
-    const snap = await getDoc(doc(db, 'leads', id));
-    if(!snap.exists()){
-      alert('Lead not found');
-      modalBackdrop.style.display = 'none';
-      return;
-    }
-    const d = snap.data();
+  // search + refresh events
+  searchInput.addEventListener('input', ()=> renderRows(allLeads));
+  refreshBtn.addEventListener('click', ()=> renderRows(allLeads));
+
+  // open edit modal
+  async function openEdit(id){
+    currentId = id;
+    modal.style.display = 'flex';
+    const snap = await getDocSafe(id);
+    if(!snap) { alert('Lead not found'); modal.style.display='none'; return; }
+    const d = snap;
     mName.value = d.name || '';
     mEmail.value = d.email || '';
     mPhone.value = d.phone || '';
-    mStatus.value = d.status || 'New';
-    mOwner.value = d.owner || '';
-    mComment.value = d.comment || d.notes || '';
+    mComment.value = d.comment || '';
   }
 
-  modalClose.addEventListener('click', ()=> { modalBackdrop.style.display = 'none'; currentLeadId = null; });
+  modalClose.addEventListener('click', ()=> { modal.style.display='none'; currentId = null; });
 
-  // save updates back to firestore
-  modalSave.addEventListener('click', async () => {
-    if(!currentLeadId) return;
+  // save changes
+  modalSave.addEventListener('click', async ()=>{
+    if(!currentId) return;
     try{
-      await updateDoc(doc(db,'leads',currentLeadId), {
-        name: mName.value.trim(),
-        email: mEmail.value.trim(),
-        phone: mPhone.value.trim(),
-        status: mStatus.value,
-        owner: mOwner.value.trim(),
-        comment: mComment.value.trim(),
-        updatedAt: serverTimestamp()
+      await updateDoc(doc(db, 'leads', currentId), {
+        name: (mName.value||'').trim(),
+        email: (mEmail.value||'').trim(),
+        phone: (mPhone.value||'').trim(),
+        comment: (mComment.value||'').trim()
       });
-      modalBackdrop.style.display = 'none';
-      currentLeadId = null;
-    }catch(e){
-      console.error(e);
-      alert('Save failed: '+e.message);
-    }
+      modal.style.display = 'none';
+      currentId = null;
+    }catch(e){ alert('Save failed: '+e.message); }
   });
 
-  // delete lead
-  modalDelete.addEventListener('click', async () => {
-    if(!currentLeadId) return;
+  // delete
+  modalDelete.addEventListener('click', async ()=>{
+    if(!currentId) return;
     if(!confirm('Delete this lead?')) return;
     try{
-      await deleteDoc(doc(db,'leads',currentLeadId));
-      modalBackdrop.style.display = 'none';
-      currentLeadId = null;
-    }catch(e){
-      alert('Delete failed: '+e.message);
-    }
+      await deleteDoc(doc(db, 'leads', currentId));
+      modal.style.display = 'none';
+      currentId = null;
+    }catch(e){ alert('Delete failed: '+e.message); }
   });
 
-  // small utility
-  function escapeHtml(s){ if(!s) return ''; return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+  // helper: safe getDoc returns plain data object
+  async function getDocSafe(id){
+    try{
+      const s = await getDoc(doc(db, 'leads', id));
+      if(!s.exists()) return null;
+      return s.data();
+    }catch(e){ console.warn(e); return null; }
+  }
 
-  // optional: seed if empty (comment out if you don't want it)
-  // (not necessary since you already have public leads)
+  // utilities
+  function escapeHtml(s){ if(s===undefined || s===null) return ''; return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+  function formatTimestamp(ts){
+    if(!ts) return '—';
+    try{
+      if(ts.seconds) return new Date(ts.seconds*1000).toLocaleString();
+      return new Date(ts).toLocaleString();
+    }catch(e){ return '—'; }
+  }
+
+  // Firestore functions used in this file (imported above)
+  // Note: getDoc, doc used below - import them from firebase at top
+  import { getDoc, doc, deleteDoc as fbDeleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  // we already imported deleteDoc and doc earlier; above import guards keep code consistent
+
+  // ensure deleteDoc and getDoc are available (the imports above from the module already included them)
+  // nothing else required
+
 </script>
 </body>
 </html>
