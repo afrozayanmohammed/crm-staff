@@ -1,338 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Finaqular Staff CRM Dashboard</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
+<meta charset="utf-8" />
+<title>Finaqular — Staff CRM Dashboard</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <style>
-/* --------------------------------------------------
-   GEN-Z FINTECH GLASS UI THEME
--------------------------------------------------- */
-:root {
-  --bg1:#050a1a;
-  --bg2:#091328;
-  --glass:rgba(255,255,255,0.05);
+:root{
+  --bg-1:#030618;
+  --bg-2:#07122a;
+  --glass: rgba(255,255,255,0.03);
+  --muted:#9fb4d0;
   --accent:#00f0ff;
-  --accent2:#00aaff;
-  --danger:#ff4d6d;
-  --success:#10b981;
-  --muted:#99a8c0;
-  font-family:"Inter",sans-serif;
+  --accent-2:#00aaff;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
-
-body {
-  margin:0;
-  background: radial-gradient(circle at top,#0d1a37,#050a1a 60%);
-  color:white;
-}
-
-/* floating blobs */
-.blob {
-  position:fixed; width:320px; height:320px;
-  background:radial-gradient(circle,rgba(0,255,255,0.25),transparent);
-  border-radius:50%;
-  filter:blur(75px);
-  animation:float 10s infinite ease-in-out;
-  z-index:-1;
-}
-.blob:nth-child(1){ left:-10%; top:5%; }
-.blob:nth-child(2){ right:-10%; bottom:5%; animation-delay:3s; }
-
-@keyframes float {
-  0%{ transform:translate(0,0); }
-  50%{ transform:translate(40px,-30px); }
-  100%{ transform:translate(0,0); }
-}
-
-/* LOGIN SCREEN */
-#login-screen {
-  max-width:380px; margin:90px auto; padding:30px;
-  background:var(--glass); border-radius:16px;
-  backdrop-filter:blur(12px);
-  border:1px solid rgba(255,255,255,0.08);
-  box-shadow:0 0 40px rgba(0,255,255,0.18);
-}
-.logo {
-  font-size:28px; font-weight:900;
-  background:linear-gradient(90deg,var(--accent),var(--accent2));
-  -webkit-background-clip:text;
-  color:transparent;
-}
-input {
-  width:100%; padding:12px; margin-top:12px;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,0.08);
-  background:rgba(255,255,255,0.03);
-  color:white;
-}
-button {
-  width:100%; padding:12px; margin-top:18px;
-  border-radius:10px; cursor:pointer; border:none;
-  font-weight:700; font-size:15px;
-  background:linear-gradient(90deg,var(--accent),var(--accent2));
-  color:#012626;
-}
-#error-msg {
-  margin-top:10px; text-align:center;
-  color:var(--danger); font-size:13px;
-}
-
-/* DASHBOARD */
-#dashboard { display:none; padding:20px; max-width:1200px; margin:auto; }
-
-.card {
-  background:var(--glass);
-  padding:16px;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,0.05);
-  margin-bottom:14px;
-}
-
-/* Table */
-table { width:100%; border-collapse:collapse; font-size:14px; }
-th,td { padding:10px; border-bottom:1px solid rgba(255,255,255,0.05); }
-th { color:var(--muted); font-size:12px; text-transform:uppercase; }
-
-.status-pill {
-  padding:5px 10px; border-radius:20px; font-weight:700; font-size:12px;
-}
-.s-new { color:var(--accent); }
-.s-contacted { color:#ffd166; }
-.s-qualified { color:#c7a6ff; }
-.s-proposal { color:#9ae6b4; }
-.s-won { color:var(--success); }
-.s-lost { color:var(--danger); }
-
-.action-btn {
-  padding:6px 10px; border-radius:8px;
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.08);
-  cursor:pointer; color:#d3e2ff;
-}
-.action-btn:hover { background:rgba(255,255,255,0.12); }
-
-/* MODAL */
-.modal-backdrop {
-  position:fixed; inset:0;
-  background:rgba(0,0,0,0.6);
-  display:none;
-  align-items:center; justify-content:center;
-  z-index:999;
-}
-.modal {
-  width:100%; max-width:580px;
-  background:#091223;
-  padding:20px;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,0.1);
-}
-.modal input, .modal textarea, .modal select {
-  width:100%; padding:10px; margin-top:10px;
-  border-radius:10px;
-  background:rgba(255,255,255,0.04);
-  border:1px solid rgba(255,255,255,0.1);
-  color:white;
-}
-.modal button {
-  padding:10px; border-radius:10px; margin-top:14px;
-  width:100%; cursor:pointer;
-}
+*{box-sizing:border-box}
+body{margin:0; color:#eaf6ff; background: radial-gradient(circle at 10% 10%, rgba(0,240,255,0.04), transparent), linear-gradient(180deg,var(--bg-1),var(--bg-2)); -webkit-font-smoothing:antialiased;}
+.wrap{max-width:1200px;margin:28px auto;padding:18px}
+header{display:flex;align-items:center;gap:12px}
+.brand{font-weight:900;font-size:20px;letter-spacing:1px;background:linear-gradient(90deg,var(--accent),var(--accent-2));-webkit-background-clip:text;color:transparent}
+.sub{color:var(--muted);font-size:13px}
+.top-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
+button{border:0;padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:700}
+.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+.btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#022426}
+.card{background:linear-gradient(180deg,rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th, td{padding:10px 12px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.03)}
+th{font-size:12px;color:var(--muted);text-transform:uppercase}
+.status-pill{padding:6px 9px;border-radius:999px;font-weight:700;font-size:12px}
+.s-new{background:rgba(0,240,255,0.06);color:var(--accent)}
+.s-contacted{background:rgba(255,255,255,0.03);color:#ffd166}
+.s-qualified{background:rgba(255,255,255,0.03);color:#b794f4}
+.s-proposal{background:rgba(255,255,255,0.03);color:#9ae6b4}
+.s-won{background:rgba(0,240,255,0.06);color:#10b981}
+.s-lost{background:rgba(255,255,255,0.03);color:#ef4444}
+.action-btn{padding:6px 10px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.04);cursor:pointer;color:#d3e2ff}
+.action-btn:hover{background:rgba(255,255,255,0.08)}
+.small{font-size:13px;color:var(--muted)}
+.modal-backdrop{position:fixed;inset:0;background:rgba(2,6,23,0.6);display:none;align-items:center;justify-content:center;padding:18px;z-index:999}
+.modal{width:100%;max-width:720px;background:linear-gradient(180deg,#071022,#04101a);padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.02)}
+.modal input, .modal textarea, .modal select {width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;margin-top:8px}
+@media(max-width:900px){ .wrap{padding:12px} table{font-size:13px} }
 </style>
 </head>
-
 <body>
+  <div class="wrap">
+    <header>
+      <div>
+        <div class="brand">FINAQULAR</div>
+        <div class="sub">Staff CRM Dashboard — Real-time pipeline & lead management</div>
+      </div>
 
-<!-- Background Blobs -->
-<div class="blob"></div>
-<div class="blob"></div>
+      <div class="top-actions">
+        <div id="auth-section" class="card" style="padding:8px 10px;display:flex;gap:10px;align-items:center">
+          <div class="small muted" id="user-label">Not signed in</div>
+        </div>
+        <button id="btn-signin" class="btn-primary">Login</button>
+        <button id="btn-signout" class="btn-ghost" style="display:none">Sign out</button>
+      </div>
+    </header>
 
-<!-- LOGIN SCREEN -->
-<div id="login-screen">
-  <div class="logo">FINAQULAR</div>
-  <p style="color:var(--muted);margin-top:6px">Staff Login Portal</p>
-
-  <input id="login-email" type="email" placeholder="Username">
-  <input id="login-pass" type="password" placeholder="Password">
-
-  <button id="login-btn" type="button">Sign In</button>
-  <div id="error-msg"></div>
-</div>
-
-<!-- DASHBOARD -->
-<div id="dashboard">
-  <h2>Finaqular Staff Dashboard</h2>
-
-  <div class="card">
-    <h3>Lead List</h3>
-
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Contact</th>
-          <th>Status</th>
-          <th>Owner</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="table-body">
-        <tr><td colspan="5" style="text-align:center;color:var(--muted)">Loading…</td></tr>
-      </tbody>
-    </table>
+    <div style="margin-top:18px" class="card">
+      <h3 style="margin:0 0 12px">Lead List</h3>
+      <div class="table-wrap">
+        <table aria-live="polite">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Status</th>
+              <th>Owner</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="table-body">
+            <tr><td colspan="6" style="text-align:center;color:var(--muted)">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
-</div>
 
-<!-- EDIT MODAL -->
-<div class="modal-backdrop" id="modal">
-  <div class="modal">
-    <h3>Edit Lead</h3>
+  <!-- Edit Modal -->
+  <div class="modal-backdrop" id="modal">
+    <div class="modal card">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <h3 id="modal-title">Edit Lead</h3>
+        <button id="modal-close" class="btn-ghost">Close</button>
+      </div>
 
-    <input id="m-name" placeholder="Name">
-    <input id="m-contact" placeholder="Contact">
-    <input id="m-owner" placeholder="Owner">
+      <div style="margin-top:12px">
+        <label class="small">Name</label>
+        <input id="m-name" />
 
-    <select id="m-status">
-      <option>New</option>
-      <option>Contacted</option>
-      <option>Qualified</option>
-      <option>Proposal</option>
-      <option>Won</option>
-      <option>Lost</option>
-    </select>
+        <label class="small">Email</label>
+        <input id="m-email" />
 
-    <textarea id="m-notes" placeholder="Internal notes"></textarea>
+        <label class="small">Phone</label>
+        <input id="m-phone" />
 
-    <button id="save-lead" style="background:var(--accent);color:#002b2b;font-weight:700">Save</button>
-    <button id="close-modal" style="background:#333;color:white">Close</button>
+        <label class="small">Status</label>
+        <select id="m-status">
+          <option>New</option><option>Contacted</option><option>Qualified</option><option>Proposal</option><option>Won</option><option>Lost</option>
+        </select>
+
+        <label class="small">Owner</label>
+        <input id="m-owner" placeholder="owner email (optional)" />
+
+        <label class="small">Comment (customer)</label>
+        <textarea id="m-comment"></textarea>
+
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button id="modal-save" class="btn-primary">Save</button>
+          <button id="modal-delete" class="btn-ghost" style="background:#2b2b2b;color:#fff">Delete</button>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
 
-<!-- FIREBASE + LOGIC -->
 <script type="module">
-/* ----------------------------------------------------
-   FIREBASE CONFIG (UPDATE THIS!)
----------------------------------------------------- */
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {
-  getFirestore, collection, onSnapshot,
-  doc, updateDoc, getDoc, serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  // -------------------------
+  // Firebase config (you provided)
+  // -------------------------
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import {
+    getFirestore, collection, query, orderBy, onSnapshot,
+    doc, getDoc, updateDoc, deleteDoc, addDoc, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+  const firebaseConfig = {
+    apiKey: "AIzaSyDPqbxxoNUos9Zqe-En4qQghHPLjCUN3vA",
+    authDomain: "finaqular-crm.firebaseapp.com",
+    projectId: "finaqular-crm",
+    storageBucket: "finaqular-crm.firebasestorage.app",
+    messagingSenderId: "708297871714",
+    appId: "1:708297871714:web:bff1ff1976f33bb1b55c3b"
+  };
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDPqbxxoNUos9Zqe-En4qQghHPLjCUN3vA",
-  authDomain: "finaqular-crm.firebaseapp.com",
-  projectId: "finaqular-crm",
-  storageBucket: "finaqular-crm.firebasestorage.app",
-  messagingSenderId: "708297871714",
-  appId: "1:708297871714:web:bff1ff1976f33bb1b55c3b"
-};
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+  // UI refs
+  const tbody = document.getElementById('table-body');
+  const modalBackdrop = document.getElementById('modal');
+  const modalClose = document.getElementById('modal-close');
+  const modalSave = document.getElementById('modal-save');
+  const modalDelete = document.getElementById('modal-delete');
 
-/* ----------------------------------------------------
-   LOGIN SYSTEM (STATIC CREDENTIALS)
----------------------------------------------------- */
-document.addEventListener("DOMContentLoaded", () => {
+  const mName = document.getElementById('m-name');
+  const mEmail = document.getElementById('m-email');
+  const mPhone = document.getElementById('m-phone');
+  const mStatus = document.getElementById('m-status');
+  const mOwner = document.getElementById('m-owner');
+  const mComment = document.getElementById('m-comment');
 
-  const LOGIN_EMAIL = "admin@finaqular.com";
-  const LOGIN_PASS  = "admin@123";
+  let currentLeadId = null;
 
-  const loginBtn = document.getElementById("login-btn");
-
-  loginBtn.addEventListener("click", () => {
-
-    const email = document.getElementById("login-email").value.trim();
-    const pass  = document.getElementById("login-pass").value.trim();
-    const err   = document.getElementById("error-msg");
-
-    if (email === LOGIN_EMAIL && pass === LOGIN_PASS) {
-
-      // hide login
-      document.getElementById("login-screen").style.display = "none";
-
-      // show dashboard
-      document.getElementById("dashboard").style.display = "block";
-
-      err.textContent = "";
-
-    } else {
-      err.textContent = "Incorrect username or password.";
-    }
-  });
-});
-
-/* ----------------------------------------------------
-   REALTIME FIRESTORE LEAD LIST
----------------------------------------------------- */
-function loadLeads() {
-  const q = query(collection(db, "leads"), orderBy("createdAt", "desc"));
-
+  // Real-time listener for leads collection (ordered by createdAt desc)
+  const q = query(collection(db, 'leads'), orderBy('createdAt','desc'));
   onSnapshot(q, snapshot => {
-    const tbody = document.getElementById("table-body");
-    tbody.innerHTML = "";
-
+    // build rows
+    const rows = [];
     snapshot.forEach(docSnap => {
       const d = docSnap.data();
       const id = docSnap.id;
-
-      const row = `
-      <tr>
-        <td>${d.name || "-"}</td>
-        <td>${d.contact || "-"}</td>
-        <td><span class="status-pill s-${(d.status||"new").toLowerCase()}">${d.status}</span></td>
-        <td>${d.owner || "-"}</td>
-        <td><button class="action-btn" onclick="editLead('${id}')">Edit</button></td>
-      </tr>`;
-
-      tbody.innerHTML += row;
+      rows.push({ id, ...d });
     });
-  });
-}
-loadLeads();
-
-/* ----------------------------------------------------
-   EDIT MODAL LOGIC
----------------------------------------------------- */
-window.editLead = async function(id) {
-  currentLeadId = id;
-
-  const modal = document.getElementById("modal");
-  modal.style.display = "flex";
-
-  const snap = await getDoc(doc(db,"leads",id));
-  const d = snap.data();
-
-  document.getElementById("m-name").value = d.name || "";
-  document.getElementById("m-contact").value = d.contact || "";
-  document.getElementById("m-owner").value = d.owner || "";
-  document.getElementById("m-status").value = d.status || "New";
-  document.getElementById("m-notes").value = d.notes || "";
-};
-
-document.getElementById("close-modal").addEventListener("click", () => {
-  document.getElementById("modal").style.display="none";
-});
-
-let currentLeadId = null;
-
-document.getElementById("save-lead").addEventListener("click", async () => {
-
-  await updateDoc(doc(db,"leads",currentLeadId), {
-    name: document.getElementById("m-name").value,
-    contact: document.getElementById("m-contact").value,
-    owner: document.getElementById("m-owner").value,
-    status: document.getElementById("m-status").value,
-    notes: document.getElementById("m-notes").value,
-    updatedAt: serverTimestamp()
+    renderRows(rows);
+  }, err=>{
+    console.error('Realtime error', err);
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#ff9b9b">Realtime error: ${err.message}</td></tr>`;
   });
 
-  document.getElementById("modal").style.display="none";
-});
+  function renderRows(leads){
+    if(!leads || leads.length === 0){
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--muted)">No leads yet.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = leads.map(l => {
+      const email = escapeHtml(l.email || '-');
+      const phone = escapeHtml(l.phone || '-');
+      const status = escapeHtml(l.status || 'New');
+      const owner = escapeHtml(l.owner || '-');
+      return `<tr data-id="${l.id}">
+        <td style="font-weight:700">${escapeHtml(l.name||'-')}</td>
+        <td class="small">${email}</td>
+        <td class="small">${phone}</td>
+        <td><span class="status-pill s-${(status||'new').toLowerCase()}">${status}</span></td>
+        <td class="small">${owner}</td>
+        <td><button class="action-btn" data-id="${l.id}" data-action="edit">Edit</button></td>
+      </tr>`;
+    }).join('');
+
+    // attach click listeners for edit buttons
+    document.querySelectorAll('button[data-action="edit"]').forEach(btn=>{
+      btn.addEventListener('click', (e)=> {
+        const id = btn.dataset.id;
+        openModal(id);
+      });
+    });
+  }
+
+  // open modal and populate data
+  async function openModal(id){
+    currentLeadId = id;
+    modalBackdrop.style.display = 'flex';
+    const snap = await getDoc(doc(db, 'leads', id));
+    if(!snap.exists()){
+      alert('Lead not found');
+      modalBackdrop.style.display = 'none';
+      return;
+    }
+    const d = snap.data();
+    mName.value = d.name || '';
+    mEmail.value = d.email || '';
+    mPhone.value = d.phone || '';
+    mStatus.value = d.status || 'New';
+    mOwner.value = d.owner || '';
+    mComment.value = d.comment || d.notes || '';
+  }
+
+  modalClose.addEventListener('click', ()=> { modalBackdrop.style.display = 'none'; currentLeadId = null; });
+
+  // save updates back to firestore
+  modalSave.addEventListener('click', async () => {
+    if(!currentLeadId) return;
+    try{
+      await updateDoc(doc(db,'leads',currentLeadId), {
+        name: mName.value.trim(),
+        email: mEmail.value.trim(),
+        phone: mPhone.value.trim(),
+        status: mStatus.value,
+        owner: mOwner.value.trim(),
+        comment: mComment.value.trim(),
+        updatedAt: serverTimestamp()
+      });
+      modalBackdrop.style.display = 'none';
+      currentLeadId = null;
+    }catch(e){
+      console.error(e);
+      alert('Save failed: '+e.message);
+    }
+  });
+
+  // delete lead
+  modalDelete.addEventListener('click', async () => {
+    if(!currentLeadId) return;
+    if(!confirm('Delete this lead?')) return;
+    try{
+      await deleteDoc(doc(db,'leads',currentLeadId));
+      modalBackdrop.style.display = 'none';
+      currentLeadId = null;
+    }catch(e){
+      alert('Delete failed: '+e.message);
+    }
+  });
+
+  // small utility
+  function escapeHtml(s){ if(!s) return ''; return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+
+  // optional: seed if empty (comment out if you don't want it)
+  // (not necessary since you already have public leads)
 </script>
-
 </body>
 </html>
