@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Finaqular — Staff CRM</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root{
+  --bg1:#041026; --bg2:#071428; --glass:rgba(255,255,255,0.03);
+  --muted:#9fb4d0; --accent:#00f0ff; --accent2:#00aaff;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; color:#eaf6ff;
+  background: radial-gradient(circle at 10% 10%, rgba(0,240,255,0.03), transparent), linear-gradient(180deg,var(--bg1),var(--bg2));
+  -webkit-font-smoothing:antialiased;
+}
+
+/* layout */
+.container{max-width:1200px;margin:28px auto;padding:18px}
+.header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-weight:900;font-size:24px;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;color:transparent}
+.muted{color:var(--muted)}
+
+/* login */
+#login-card{max-width:420px;margin:64px auto;padding:26px;border-radius:12px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04)}
+input, textarea, select{width:100%;padding:10px;margin-top:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+button{padding:10px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:700}
+.btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#012626}
+.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+
+/* dashboard */
+#dashboard{display:none}
+.card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);margin-top:18px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:12px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:left}
+th{font-size:12px;color:var(--muted);text-transform:uppercase}
+.action-btn{padding:6px 10px;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.04);cursor:pointer;color:#d8eefc}
+.action-btn:hover{background:rgba(255,255,255,0.06)}
+
+/* modal */
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:999}
+.modal{width:100%;max-width:720px;background:#071323;padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.04)}
+.small{font-size:13px;color:var(--muted)}
+
+@media (max-width:880px){
+  .container{padding:12px}
+  th,td{padding:8px}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div>
+      <div class="brand">FINAQULAR</div>
+      <div class="small muted">Staff CRM Dashboard</div>
+    </div>
+    <div id="top-controls" style="display:flex;gap:8px;align-items:center">
+      <div id="signed-as" class="small muted">Not signed in</div>
+      <button id="logout-btn" class="btn-ghost" style="display:none">Logout</button>
+    </div>
+  </div>
+
+  <!-- Login Card -->
+  <div id="login-card">
+    <h2 style="margin:0 0 8px">Staff Login</h2>
+    <div class="small muted" style="margin-bottom:12px">Use staff credentials to access leads</div>
+
+    <label class="small muted">Username</label>
+    <input id="login-email" type="email" placeholder="admin@finaqular.com">
+
+    <label class="small muted">Password</label>
+    <input id="login-pass" type="password" placeholder="admin@123">
+
+    <button id="login-btn" class="btn-primary" style="margin-top:12px" type="button">Sign In</button>
+    <div id="login-error" style="color:#ff8080;margin-top:10px"></div>
+
+    <div class="small muted" style="margin-top:12px">Credentials: <strong>admin@finaqular.com</strong> / <strong>admin@123</strong></div>
+  </div>
+
+  <!-- Dashboard (hidden until login) -->
+  <div id="dashboard">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <h2 style="margin:0">Lead List</h2>
+        <div class="small muted" style="margin-top:6px">Real-time leads (read-only for public submissions)</div>
+      </div>
+
+      <div style="display:flex;gap:8px;align-items:center">
+        <input id="search" type="search" placeholder="Search name, email, phone, comment" style="padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit" />
+        <button id="btn-refresh" class="btn-ghost">Refresh</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Comment</th>
+            <th>Date &amp; Time</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          <tr><td colspan="6" class="muted" style="text-align:center;padding:28px">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal-backdrop" id="modal">
+  <div class="modal">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <h3 style="margin:0">Edit Lead</h3>
+      <div>
+        <button id="modal-close" class="btn-ghost">Close</button>
+      </div>
+    </div>
+
+    <div style="margin-top:12px">
+      <label class="small muted">Name</label>
+      <input id="m-name">
+
+      <label class="small muted">Email</label>
+      <input id="m-email">
+
+      <label class="small muted">Phone</label>
+      <input id="m-phone">
+
+      <label class="small muted">Comment</label>
+      <textarea id="m-comment" rows="4"></textarea>
+
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button id="modal-save" class="btn-primary">Save changes</button>
+        <button id="modal-delete" class="btn-ghost" style="background:#3b1b1b;color:white">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase + App Logic -->
+<script type="module">
+/* -------------------
+   Firebase imports
+   ------------------- */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getFirestore, collection, query, orderBy, onSnapshot,
+  doc, getDoc, updateDoc, deleteDoc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+/* -------------------
+   Your Firebase config
+   ------------------- */
+const firebaseConfig = {
+  apiKey: "AIzaSyDPqbxxoNUos9Zqe-En4qQghHPLjCUN3vA",
+  authDomain: "finaqular-crm.firebaseapp.com",
+  projectId: "finaqular-crm",
+  storageBucket: "finaqular-crm.firebasestorage.app",
+  messagingSenderId: "708297871714",
+  appId: "1:708297871714:web:bff1ff1976f33bb1b55c3b"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* -------------------
+   UI Refs & State
+   ------------------- */
+const loginCard = document.getElementById('login-card');
+const loginBtn = document.getElementById('login-btn');
+const loginError = document.getElementById('login-error');
+const loginEmail = document.getElementById('login-email');
+const loginPass = document.getElementById('login-pass');
+
+const dashboard = document.getElementById('dashboard');
+const signedAs = document.getElementById('signed-as');
+const logoutBtn = document.getElementById('logout-btn');
+
+const tableBody = document.getElementById('table-body');
+const searchInput = document.getElementById('search');
+const btnRefresh = document.getElementById('btn-refresh');
+
+const modalBackdrop = document.getElementById('modal');
+const modalClose = document.getElementById('modal-close');
+const modalSave = document.getElementById('modal-save');
+const modalDelete = document.getElementById('modal-delete');
+const mName = document.getElementById('m-name');
+const mEmail = document.getElementById('m-email');
+const mPhone = document.getElementById('m-phone');
+const mComment = document.getElementById('m-comment');
+
+let currentId = null;
+let leadsCache = [];
+
+/* -------------------
+   Staff Credentials
+   ------------------- */
+const STAFF_USER = "admin@finaqular.com";
+const STAFF_PASS = "admin@123";
+
+/* -------------------
+   Login Handler
+   ------------------- */
+loginBtn.addEventListener('click', () => {
+  const u = (loginEmail.value || '').trim();
+  const p = (loginPass.value || '').trim();
+
+  if (u === STAFF_USER && p === STAFF_PASS) {
+    loginCard.style.display = 'none';
+    dashboard.style.display = 'block';
+    signedAs.textContent = `Signed in as ${u}`;
+    logoutBtn.style.display = 'inline-block';
+    loginError.textContent = '';
+    startRealtime(); // start listening after login
+  } else {
+    loginError.textContent = 'Incorrect username or password.';
+  }
+});
+
+logoutBtn.addEventListener('click', () => {
+  // for simplicity, reload to reset state
+  location.reload();
+});
+
+/* -------------------
+   Real-time listener
+   ------------------- */
+function startRealtime(){
+  const q = query(collection(db, 'leads'), orderBy('createdAt','desc'));
+  onSnapshot(q, snapshot => {
+    const rows = [];
+    snapshot.forEach(snap => rows.push({ id: snap.id, ...snap.data() }));
+    leadsCache = rows;
+    renderTable(rows);
+  }, err => {
+    console.error('Realtime error', err);
+    tableBody.innerHTML = `<tr><td colspan="6" class="muted" style="text-align:center">Realtime error: ${escapeHtml(err.message)}</td></tr>`;
+  });
+}
+
+/* -------------------
+   Render table
+   ------------------- */
+function renderTable(leads){
+  const q = (searchInput.value || '').trim().toLowerCase();
+  const filtered = leads.filter(l => {
+    if(!q) return true;
+    const hay = `${l.name||''} ${l.email||''} ${l.phone||''} ${l.comment||''}`.toLowerCase();
+    return hay.includes(q);
+  });
+
+  if(!filtered.length){
+    tableBody.innerHTML = `<tr><td colspan="6" class="muted" style="text-align:center">No leads found.</td></tr>`;
+    return;
+  }
+
+  tableBody.innerHTML = filtered.map(l => {
+    const created = formatTimestamp(l.createdAt);
+    return `<tr data-id="${l.id}">
+      <td style="font-weight:700">${escapeHtml(l.name||'-')}</td>
+      <td>${escapeHtml(l.email||'-')}</td>
+      <td>${escapeHtml(l.phone||'-')}</td>
+      <td style="max-width:360px">${escapeHtml(l.comment||'')}</td>
+      <td>${escapeHtml(created)}</td>
+      <td><button class="action-btn" data-id="${l.id}" data-action="edit">Edit</button></td>
+    </tr>`;
+  }).join('');
+
+  // attach listeners
+  document.querySelectorAll('button[data-action="edit"]').forEach(btn => {
+    btn.addEventListener('click', () => openEditModal(btn.dataset.id));
+  });
+}
+
+/* -------------------
+   Search & refresh
+   ------------------- */
+searchInput.addEventListener('input', () => renderTable(leadsCache));
+btnRefresh.addEventListener('click', () => renderTable(leadsCache));
+
+/* -------------------
+   Modal functions
+   ------------------- */
+async function openEditModal(id){
+  currentId = id;
+  modalBackdrop.style.display = 'flex';
+  try{
+    const d = await getLeadData(id);
+    if(!d) { alert('Lead not found'); modalBackdrop.style.display='none'; return; }
+    mName.value = d.name || '';
+    mEmail.value = d.email || '';
+    mPhone.value = d.phone || '';
+    mComment.value = d.comment || '';
+  }catch(e){
+    alert('Failed to open lead: '+e.message);
+    modalBackdrop.style.display = 'none';
+  }
+}
+
+modalClose.addEventListener('click', () => { modalBackdrop.style.display = 'none'; currentId = null; });
+
+modalSave.addEventListener('click', async () => {
+  if(!currentId) return;
+  try{
+    await updateDoc(doc(db, 'leads', currentId), {
+      name: (mName.value||'').trim(),
+      email: (mEmail.value||'').trim(),
+      phone: (mPhone.value||'').trim(),
+      comment: (mComment.value||'').trim()
+    });
+    modalBackdrop.style.display = 'none';
+    currentId = null;
+  }catch(e){
+    alert('Save failed: '+e.message);
+  }
+});
+
+modalDelete.addEventListener('click', async () => {
+  if(!currentId) return;
+  if(!confirm('Delete this lead?')) return;
+  try{
+    await deleteDoc(doc(db,'leads',currentId));
+    modalBackdrop.style.display = 'none';
+    currentId = null;
+  }catch(e){
+    alert('Delete failed: '+e.message);
+  }
+});
+
+/* -------------------
+   Small helpers
+   ------------------- */
+async function getLeadData(id){
+  try{
+    const snap = await getDoc(doc(db,'leads',id));
+    if(!snap.exists()) return null;
+    return snap.data();
+  }catch(e){ console.warn(e); return null; }
+}
+
+function formatTimestamp(ts){
+  if(!ts) return '-';
+  try{
+    if(ts.seconds) return new Date(ts.seconds*1000).toLocaleString();
+    return new Date(ts).toLocaleString();
+  }catch(e){ return '-'; }
+}
+
+function escapeHtml(s){ if(s===undefined||s===null) return ''; return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+
+/* -------------------
+   Bring in small firestore helpers we used (getDoc, doc)
+   The module imports above already include them
+   so nothing else required here.
+   ------------------- */
+
+</script>
+</body>
+</html>
